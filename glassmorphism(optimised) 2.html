@@ -1,0 +1,763 @@
+<html>
+<head>
+<title>MacOS 26</title>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+	background: radial-gradient(circle at 30% 20%, white, transparent 30%), linear-gradient(135deg, #6a5cff, #ff4ecd);
+	font-weight: bold;
+	font-family: "trebuchet MS", monospace;
+	padding: 2px;
+    overflow: hidden;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+}
+.btn {
+	height: auto;
+	width: auto;
+	border-radius: 10px;
+	background: white;
+	opacity: 0.3;
+	color: black;
+    border: none;
+    cursor: pointer;
+    padding: 4px 10px;
+}
+.navbar{
+    display: flex;
+    align-items: center;
+	height: 30px;
+	width: auto;
+	gap: 10px;
+	border: 2px solid rgba(255, 255, 255, 0.8);
+	border-radius: 50px;
+	background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 0 15px;
+    position: relative;
+    z-index: 2000;
+}
+.dropdown-menu {
+    position: absolute;
+    top: 40px;
+    left: 280px;
+    width: 160px;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    display: none;
+    flex-direction: column;
+    padding: 6px;
+    z-index: 3000;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+    gap: 4px;
+}
+.dropdown-btn {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    text-align: left;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: "trebuchet MS", monospace;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+}
+.dropdown-btn:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+.dock{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+	height: 70px;
+	width: 90%;
+    max-width: 500px;
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	border: 2px solid rgba(255, 255, 255, 0.8);
+	border-radius: 25px;
+	background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 0 10px;
+    z-index: 2000;
+}
+.dockicon{
+	height: 50px;
+	width: 50px;
+	color: black;
+	text-align: center;
+	overflow-wrap: anywhere;
+	border: 2px solid rgba(255, 255, 255, 0.8);
+	border-radius: 15px;
+	background: white;
+	opacity: 0.4;
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.watermark {
+	color: white;
+	opacity: 0.3;
+	font-size: 50px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 400px;
+}
+.window {
+    position: absolute;
+    width: 350px;
+    height: 220px;
+    min-width: 200px;
+    min-height: 150px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 100;
+}
+
+.window-header {
+    height: 35px;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    cursor: grab;
+    font-family: "Trebuchet MS", monospace;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.window-content {
+    padding: 15px;
+    font-family: "Trebuchet MS", monospace;
+    color: #000;
+    flex-grow: 1;
+}
+
+.close-btn {
+    background: #ff5f56;
+    border: none;
+    border-radius: 10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.resize-handle {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 18px;
+    height: 18px;
+    cursor: nwse-resize;
+    z-index: 10;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: auto;
+}
+
+.control-center {
+    position: absolute;
+    top: 40px;
+    left: 120px; /* Positioned near the Menu/Options buttons */
+    width: 220px;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 16px;
+    display: none;
+    flex-direction: column;
+    padding: 12px;
+    z-index: 3000;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+    gap: 12px;
+}
+.cc-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+}
+.cc-section input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+}
+.wallpaper-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+.wp-btn {
+    height: 30px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+}
+#screenDimmer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: opacity 0.1s ease;
+}
+
+
+#clock{
+	font-size: 15px;
+	font-family: "Trebuchet MS", monospace;
+	font-weight: bold;
+}
+#date{
+	font-size: 15px;
+	font-family: "Trebuchet MS", monospace;
+	font-weight: bold;
+}
+
+.about-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 16px;
+    display: none;
+    flex-direction: column;
+    z-index: 5000;
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+.about-header {
+    height: 35px;
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+.about-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 13px;
+    color: #000;
+}
+.close-about {
+    background: #ff5f56;
+    border: none;
+    border-radius: 10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* Dark Mode Theme Overrides */
+body.dark-mode {
+    background: radial-gradient(circle at 30% 20%, #222, transparent 30%), linear-gradient(135deg, #111, #1a1a2e) !important;
+    color: #fff;
+}
+body.dark-mode .window {
+    background: rgba(30, 30, 30, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+body.dark-mode .window-content {
+    color: #fff;
+}
+body.dark-mode .navbar, 
+body.dark-mode .dock, 
+body.dark-mode .dropdown-menu, 
+body.dark-mode .control-center,
+body.dark-mode .about-modal {
+    background: rgba(30, 30, 30, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+body.dark-mode .dropdown-btn {
+    background: rgba(50, 50, 50, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+body.dark-mode .dropdown-btn:hover {
+    background: rgba(70, 70, 70, 0.8);
+}
+body.dark-mode .btn {
+    background: rgba(50, 50, 50, 0.8);
+    color: #fff;
+}
+
+#clock{
+	font-size: 15px;
+	font-family: "Trebuchet MS", monospace;
+	font-weight: bold;
+    margin-left: auto;
+}
+#date{
+	font-size: 15px;
+	font-family: "Trebuchet MS", monospace;
+	font-weight: bold;
+    margin-left: 15px;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+.dockicon.bounce {
+    animation: bounce 0.3s ease;
+}
+
+</style>
+</head>
+<body>
+<div class="navbar">
+    <button class="btn">Apple</button>
+    <button class="btn" id="activeAppLabel">Finder</button>
+    <button class="btn">Menu</button>
+    <button class="btn">Options</button>
+    <button class="btn" id="windowMenuBtn">Window</button>
+
+    <div class="dropdown-menu" id="windowDropdown">
+        <button class="dropdown-btn" data-action="maximize">Maximize</button>
+        <button class="dropdown-btn" data-action="left">Split Left</button>
+        <button class="dropdown-btn" data-action="right">Split Right</button>
+        <button class="dropdown-btn" data-action="reset">Reset Size</button>
+    </div>
+
+<!-- Control Center Dropdown Panel -->
+<div class="control-center" id="controlCenter">
+    <div class="cc-section">
+        <span>Display Brightness</span>
+        <input type="range" id="brightnessSlider" min="0.2" max="1" step="0.05" value="1">
+    </div>
+    <div class="cc-section">
+        <span>Wallpapers</span>
+        <div class="wallpaper-grid">
+            <button class="wp-btn" onclick="setWallpaper('linear-gradient(135deg, #6a5cff, #ff4ecd)')" style="background: linear-gradient(135deg, #6a5cff, #ff4ecd);"></button>
+            <button class="wp-btn" onclick="setWallpaper('linear-gradient(135deg, #00c6ff, #0072ff)')" style="background: linear-gradient(135deg, #00c6ff, #0072ff);"></button>
+            <button class="wp-btn" onclick="setWallpaper('linear-gradient(135deg, #11998e, #38ef7d)')" style="background: linear-gradient(135deg, #11998e, #38ef7d);"></button>
+            <button class="wp-btn" onclick="setWallpaper('linear-gradient(135deg, #f12711, #f5af19)')" style="background: linear-gradient(135deg, #f12711, #f5af19);"></button>
+        </div>
+    </div>
+</div>
+
+<!-- Options Dropdown Menu -->
+<div class="dropdown-menu" id="optionsDropdown" style="left: 190px; width: 180px;">
+    <button class="dropdown-btn" data-opt="minimize-all">Minimize All</button>
+    <button class="dropdown-btn" data-opt="dark-mode">Toggle Dark Mode</button>
+    <button class="dropdown-btn" data-opt="about">About MacOS 26</button>
+</div>
+
+<!-- About Modal -->
+<div class="about-modal" id="aboutModal">
+    <div class="about-header">
+        <span>About This Mac</span>
+        <button class="close-about" id="closeAbout">×</button>
+    </div>
+    <div class="about-content">
+        <h2>MacOS 26</h2>
+        <p><strong>Developer:</strong> Shourya Sarkar </p>
+        <p>Built with pure HTML, CSS glassmorphism, and vanilla JavaScript.</p>
+        <p>Running lightning fast with zero bloatware.</p>
+    </div>
+</div>
+
+<!-- Dimmer overlay for brightness control -->
+<div id="screenDimmer"></div>
+
+    <!-- Wrapped together so they stay on the right side -->
+    <div class="nav-right">
+        <div id="date"></div>
+        <div id="clock"></div>
+    </div>
+</div>
+
+<div class="watermark">MacOS 26</div>
+
+<div class="dock">
+<button class="dockicon" onclick="openWindow('Finder')">Finder</button>
+<button class="dockicon" onclick="openWindow('Launch')">Launch</button>
+<button class="dockicon" onclick="openWindow('Safari')">Safari</button>
+<button class="dockicon" onclick="openWindow('VS Code')">VS Code</button>
+<button class="dockicon" onclick="openWindow('Terminal')">Terminal</button>
+<button class="dockicon" onclick="openWindow('Settings')">Settings</button>
+<button class="dockicon" onclick="openWindow('iCloud')">iCloud</button>
+<button class="dockicon" onclick="openWindow('Trash')">Trash</button>
+</div>
+
+<script>
+// --- Live Clock & Date ---
+function updateDateTime() {
+    const now = new Date();
+    const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
+    const date = now.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
+    document.getElementById("clock").textContent = time;
+    document.getElementById("date").textContent = date;
+}
+updateDateTime();
+setInterval(updateDateTime, 1000);
+
+// --- Window Manager & Centralized State ---
+let zIndexCounter = 100;
+let activeWindow = null;
+
+const dropdownMenu = document.getElementById('windowDropdown');
+const windowMenuBtn = document.getElementById('windowMenuBtn');
+
+function toggleWindowMenu(e) {
+    if (e) e.stopPropagation();
+    dropdownMenu.style.display = dropdownMenu.style.display === 'flex' ? 'none' : 'flex';
+}
+
+windowMenuBtn.addEventListener('click', toggleWindowMenu);
+windowMenuBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    toggleWindowMenu(e);
+}, { passive: false });
+
+dropdownMenu.addEventListener('click', (e) => e.stopPropagation());
+dropdownMenu.addEventListener('touchend', (e) => e.stopPropagation());
+
+window.addEventListener('click', () => {
+    dropdownMenu.style.display = 'none';
+});
+window.addEventListener('touchend', (e) => {
+    if (!e.target.closest('.navbar')) {
+        dropdownMenu.style.display = 'none';
+    }
+});
+
+function getClientCoords(e) {
+    if (e.touches && e.touches.length > 0) {
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
+}
+
+function updateActiveAppTitle(appName) {
+    document.getElementById('activeAppLabel').textContent = appName;
+}
+
+function getTargetWindow() {
+    const windows = document.querySelectorAll('.window');
+    if (windows.length === 0) return null;
+    
+    let topWin = activeWindow;
+    let maxZ = -1;
+    
+    windows.forEach(win => {
+        const z = parseInt(win.style.zIndex) || 100;
+        if (z > maxZ) {
+            maxZ = z;
+            topWin = win;
+        }
+    });
+    return topWin;
+}
+
+// Snapping Action Controller
+function executeSnapAction(action, e) {
+    if (e) e.stopPropagation();
+    if (e && e.type === 'touchend') e.preventDefault();
+    
+    dropdownMenu.style.display = 'none';
+    
+    const targetWin = getTargetWindow();
+    if (!targetWin) return;
+
+    activeWindow = targetWin;
+    const appName = targetWin.querySelector('.window-header span').textContent;
+    updateActiveAppTitle(appName);
+
+    if (action === 'maximize') {
+        targetWin.style.top = '40px';
+        targetWin.style.left = '5px';
+        targetWin.style.width = 'calc(100vw - 10px)';
+        targetWin.style.height = 'calc(100vh - 135px)';
+    } else if (action === 'left') {
+        targetWin.style.top = '40px';
+        targetWin.style.left = '5px';
+        targetWin.style.width = 'calc(50vw - 7.5px)';
+        targetWin.style.height = 'calc(100vh - 135px)';
+    } else if (action === 'right') {
+        targetWin.style.top = '40px';
+        targetWin.style.left = 'calc(50vw + 2.5px)';
+        targetWin.style.width = 'calc(50vw - 7.5px)';
+        targetWin.style.height = 'calc(100vh - 135px)';
+    } else if (action === 'reset') {
+        targetWin.style.width = '350px';
+        targetWin.style.height = '220px';
+        targetWin.style.top = '100px';
+        targetWin.style.left = '150px';
+    }
+}
+
+document.querySelectorAll('.dropdown-btn').forEach(btn => {
+    const action = btn.getAttribute('data-action');
+    btn.addEventListener('click', (e) => executeSnapAction(action, e));
+    btn.addEventListener('touchend', (e) => executeSnapAction(action, e), { passive: false });
+});
+
+function openWindow(appName) {
+    // --- Trigger Dock Icon Bounce Physics ---
+    event.currentTarget.classList.add('bounce');
+    setTimeout(() => event.currentTarget.classList.remove('bounce'), 300);
+
+    // ... rest of your existing window opening code ...
+    zIndexCounter++;
+    
+    const win = document.createElement('div');
+    win.className = 'window';
+    const offset = (document.querySelectorAll('.window').length * 25) % 120;
+    win.style.top = (60 + offset) + 'px';
+    win.style.left = (80 + offset) + 'px';
+    win.style.zIndex = zIndexCounter;
+
+    win.innerHTML = `
+        <div class="window-header">
+            <span>${appName}</span>
+            <button class="close-btn">X</button>
+        </div>
+        <div class="window-content">
+            <p>Welcome to ${appName} on MacOS 26, Shourya!</p>
+        </div>
+        <div class="resize-handle"></div>
+    `;
+
+    document.body.appendChild(win);
+    activeWindow = win;
+    updateActiveAppTitle(appName);
+
+    const header = win.querySelector('.window-header');
+    const closeBtn = win.querySelector('.close-btn');
+    const resizeHandle = win.querySelector('.resize-handle');
+
+    let actionType = null;
+    let startX, startY, initW, initH, initX, initY;
+
+    function focusThisWindow(e) {
+        if(e) e.stopPropagation();
+        zIndexCounter++;
+        win.style.zIndex = zIndexCounter;
+        activeWindow = win;
+        updateActiveAppTitle(appName);
+    }
+
+    win.addEventListener('mousedown', focusThisWindow);
+    win.addEventListener('touchstart', focusThisWindow);
+
+    header.addEventListener('mousedown', (e) => {
+        if (e.target.closest('.close-btn')) return;
+        actionType = 'drag';
+        initDragResize(e);
+    });
+    header.addEventListener('touchstart', (e) => {
+        if (e.target.closest('.close-btn')) return;
+        actionType = 'drag';
+        initDragResize(e);
+    }, { passive: false });
+
+    resizeHandle.addEventListener('mousedown', (e) => {
+        actionType = 'resize';
+        initDragResize(e);
+        e.stopPropagation();
+    });
+    resizeHandle.addEventListener('touchstart', (e) => {
+        actionType = 'resize';
+        initDragResize(e);
+        e.stopPropagation();
+    }, { passive: false });
+
+    function initDragResize(e) {
+        focusThisWindow(e);
+        const coords = getClientCoords(e);
+        startX = coords.x;
+        startY = coords.y;
+        initX = win.offsetLeft;
+        initY = win.offsetTop;
+        initW = win.offsetWidth;
+        initH = win.offsetHeight;
+        if(e.type === 'touchstart') e.preventDefault();
+    }
+
+    function onMove(e) {
+        if (!actionType) return;
+        const coords = getClientCoords(e);
+        
+        if (actionType === 'drag') {
+            win.style.left = (initX + (coords.x - startX)) + 'px';
+            win.style.top = (initY + (coords.y - startY)) + 'px';
+        } else if (actionType === 'resize') {
+            win.style.width = Math.max(200, initW + (coords.x - startX)) + 'px';
+            win.style.height = Math.max(150, initH + (coords.y - startY)) + 'px';
+        }
+    }
+
+    function onEnd() {
+        actionType = null;
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onEnd);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onEnd);
+
+    closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        win.remove();
+        if (activeWindow === win) {
+            activeWindow = null;
+            const remaining = document.querySelectorAll('.window');
+            if (remaining.length > 0) {
+                let maxZ = -1;
+                remaining.forEach(w => {
+                    const z = parseInt(w.style.zIndex) || 100;
+                    if (z > maxZ) {
+                        maxZ = z;
+                        activeWindow = w;
+                    }
+                });
+                updateActiveAppTitle(activeWindow.querySelector('.window-header span').textContent);
+            } else {
+                updateActiveAppTitle('Finder');
+            }
+        }
+    });
+}
+
+const controlCenter = document.getElementById('controlCenter');
+const menuBtn = document.querySelectorAll('.btn')[2]; // Targeting the "Menu" button
+const brightnessSlider = document.getElementById('brightnessSlider');
+const screenDimmer = document.getElementById('screenDimmer');
+
+function toggleControlCenter(e) {
+    if (e) e.stopPropagation();
+    // Hide window dropdown if open
+    document.getElementById('windowDropdown').style.display = 'none';
+    controlCenter.style.display = controlCenter.style.display === 'flex' ? 'none' : 'flex';
+}
+
+menuBtn.addEventListener('click', toggleControlCenter);
+menuBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    toggleControlCenter(e);
+}, { passive: false });
+
+controlCenter.addEventListener('click', (e) => e.stopPropagation());
+controlCenter.addEventListener('touchend', (e) => e.stopPropagation());
+
+// Close control center when clicking outside
+window.addEventListener('click', () => {
+    controlCenter.style.display = 'none';
+});
+
+// Brightness slider logic (dims via black overlay opacity)
+brightnessSlider.addEventListener('input', (e) => {
+    const val = 1 - e.target.value; // Invert so max value = 0 opacity, min value = high opacity
+    screenDimmer.style.opacity = val * 0.7; // Max dim to 70% dark so it doesn't black out completely
+});
+
+// Wallpaper changer logic
+function setWallpaper(gradientString) {
+    document.body.style.background = `radial-gradient(circle at 30% 20%, white, transparent 30%), ${gradientString}`;
+}
+
+const optionsDropdown = document.getElementById('optionsDropdown');
+const optionsBtn = document.querySelectorAll('.btn')[3]; // Targeting the "Options" button
+const aboutModal = document.getElementById('aboutModal');
+const closeAboutBtn = document.getElementById('closeAbout');
+
+function toggleOptionsDropdown(e) {
+    if (e) e.stopPropagation();
+    // Close other panels
+    document.getElementById('windowDropdown').style.display = 'none';
+    document.getElementById('controlCenter').style.display = 'none';
+    
+    optionsDropdown.style.display = optionsDropdown.style.display === 'flex' ? 'none' : 'flex';
+}
+
+optionsBtn.addEventListener('click', toggleOptionsDropdown);
+optionsBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    toggleOptionsDropdown(e);
+}, { passive: false });
+
+optionsDropdown.addEventListener('click', (e) => e.stopPropagation());
+optionsDropdown.addEventListener('touchend', (e) => e.stopPropagation());
+
+// Close options when clicking anywhere outside
+window.addEventListener('click', () => {
+    optionsDropdown.style.display = 'none';
+});
+
+// Handle Options Button Actions
+document.querySelectorAll('#optionsDropdown .dropdown-btn').forEach(btn => {
+    const opt = btn.getAttribute('data-opt');
+    
+    function triggerOpt(e) {
+        if (e) e.stopPropagation();
+        if (e && e.type === 'touchend') e.preventDefault();
+        optionsDropdown.style.display = 'none';
+
+        if (opt === 'minimize-all') {
+            // Hides/removes all active windows temporarily or sets display to none
+            document.querySelectorAll('.window').forEach(win => {
+                win.style.display = 'none';
+            });
+        } else if (opt === 'dark-mode') {
+            document.body.classList.toggle('dark-mode');
+        } else if (opt === 'about') {
+            aboutModal.style.display = 'flex';
+        }
+    }
+
+    btn.addEventListener('click', triggerOpt);
+    btn.addEventListener('touchend', triggerOpt, { passive: false });
+});
+
+// Close About Modal
+closeAboutBtn.addEventListener('click', () => { aboutModal.style.display = 'none'; });
+closeAboutBtn.addEventListener('touchend', (e) => { e.preventDefault(); aboutModal.style.display = 'none'; });
+</script>
+</body>
+</html>
